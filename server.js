@@ -16,8 +16,8 @@ app.use("/public", express.static(process.cwd() + "/public"));
 app.use(
   contentSecurityPolicy({
     directives: {
-      "style-src": "self",
-      "script-src": "self",
+      "style-src": ["'self'"],
+      "script-src": ["'self'"],
     },
   })
 );
@@ -27,10 +27,10 @@ app.use(cors({ origin: "*" })); //For FCC testing purposes only
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// hash request IP and change it to the hash
+// hash request IP and add it to req object
 app.use((req, res, next) => {
   const { ip } = req;
-  req.ip = hashIP(ip);
+  req.hashedIp = hashIP(ip);
   next();
 });
 

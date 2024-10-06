@@ -4,15 +4,17 @@
 const db = {};
 
 // helper
-const fetchInfo = (stock) => {
-  return fetch(
+const fetchInfo = async (stock) => {
+  const res = await fetch(
     `https://stock-price-checker-proxy.freecodecamp.rocks/v1/stock/${stock}/quote`
   );
+  const info = await res.json();
+  return info;
 };
 
 module.exports = function (app) {
   app.route("/api/stock-prices").get(async function (req, res) {
-    const { ip } = req;
+    const { hashedIp: ip } = req;
     const { stock, like } = req.query;
     const resObjArr = [];
     const resObj = {};
@@ -33,6 +35,7 @@ module.exports = function (app) {
       });
     } else {
       const { latestPrice, symbol } = await fetchInfo(stock);
+      console.log(`Price should be ${latestPrice}`);
       resObj["price"] = latestPrice;
       resObj["stock"] = symbol;
       if (like) {
