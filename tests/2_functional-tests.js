@@ -20,7 +20,7 @@ suite("Functional Tests", function () {
       .get("/api/stock-prices")
       .query({ stock: "goog", like: "false" })
       .end((err, res) => {
-        const { stock, price, likes } = res.body;
+        const { stock, price, likes } = res.body.stockData;
         assert.equal(stock, "GOOG");
         assert.typeOf(price, "number");
         assert.strictEqual(likes, 0);
@@ -32,7 +32,7 @@ suite("Functional Tests", function () {
       .get("/api/stock-prices")
       .query({ stock: "goog", like: "true" })
       .end((err, res) => {
-        const { stock, price, likes } = res.body;
+        const { stock, price, likes } = res.body.stockData;
         assert.equal(stock, "GOOG");
         assert.typeOf(price, "number");
         assert.strictEqual(likes, 1);
@@ -44,7 +44,7 @@ suite("Functional Tests", function () {
       .get("/api/stock-prices")
       .query({ stock: "goog", like: "true" })
       .end((err, res) => {
-        const { stock, price, likes } = res.body;
+        const { stock, price, likes } = res.body.stockData;
         assert.equal(stock, "GOOG");
         assert.typeOf(price, "number");
         assert.strictEqual(likes, 1);
@@ -56,8 +56,8 @@ suite("Functional Tests", function () {
       .get("/api/stock-prices")
       .query({ stock: ["goog", "msft"], like: "false" })
       .end((err, res) => {
-        assert.isArray(res.body);
-        const [first, second] = res.body;
+        assert.isArray(res.body.stockData);
+        const [first, second] = res.body.stockData;
         assert.equal(first.stock, "GOOG");
         assert.equal(second.stock, "MSFT");
         assert.typeOf(first.price, "number");
@@ -72,8 +72,8 @@ suite("Functional Tests", function () {
       .get("/api/stock-prices")
       .query({ stock: ["goog", "msft"], like: "true" })
       .end((err, res) => {
-        assert.isArray(res.body);
-        const [first, second] = res.body;
+        assert.isArray(res.body.stockData);
+        const [first, second] = res.body.stockData;
         assert.equal(first.stock, "GOOG");
         assert.equal(second.stock, "MSFT");
         assert.typeOf(first.price, "number");

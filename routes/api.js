@@ -49,11 +49,11 @@ module.exports = function (app) {
       const likesOfSecond = db[resObjArr[1].stock]?.size ?? 0;
       resObjArr[0]["rel_likes"] = likesOfFirst - likesOfSecond;
       resObjArr[1]["rel_likes"] = likesOfSecond - likesOfFirst;
-      return res.json(resObjArr);
+      return res.json({ stockData: resObjArr });
     } else {
       const likes = db[resObj.stock]?.size ?? 0;
       resObj["likes"] = likes;
-      return res.json(resObj);
+      return res.json({ stockData: resObj });
     }
   });
 };
