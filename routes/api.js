@@ -8,8 +8,7 @@ const fetchInfo = async (stock) => {
   const res = await fetch(
     `https://stock-price-checker-proxy.freecodecamp.rocks/v1/stock/${stock}/quote`
   );
-  const info = await res.json();
-  return info;
+  return await res.json();
 };
 
 module.exports = function (app) {
@@ -26,7 +25,7 @@ module.exports = function (app) {
       ]);
       stockInfo.forEach(({ latestPrice, symbol }) => {
         resObjArr.push({ price: latestPrice, stock: symbol });
-        if (like) {
+        if (like === "true") {
           if (!db[symbol]) {
             db[symbol] = new Set();
           }
@@ -35,10 +34,9 @@ module.exports = function (app) {
       });
     } else {
       const { latestPrice, symbol } = await fetchInfo(stock);
-      console.log(`Price should be ${latestPrice}`);
       resObj["price"] = latestPrice;
       resObj["stock"] = symbol;
-      if (like) {
+      if (like === "true") {
         if (!db[symbol]) {
           db[symbol] = new Set();
         }
@@ -49,8 +47,8 @@ module.exports = function (app) {
     if (resObjArr.length > 0) {
       const likesOfFirst = db[resObjArr[0].stock]?.size ?? 0;
       const likesOfSecond = db[resObjArr[1].stock]?.size ?? 0;
-      resObjArr[0]["rel_likes"] = likesOfSecond - likesOfFirst;
-      resObjArr[1]["rel_likes"] = likesOfFirst - likesOfSecond;
+      resObjArr[0]["rel_likes"] = likesOfFirst - likesOfSecond;
+      resObjArr[1]["rel_likes"] = likesOfSecond - likesOfFirst;
       return res.json(resObjArr);
     } else {
       const likes = db[resObj.stock]?.size ?? 0;
