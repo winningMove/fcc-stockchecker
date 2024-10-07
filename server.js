@@ -30,9 +30,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // hash request IP and add it to req object
 app.use("/api", (req, res, next) => {
   const { ip } = req;
-  console.log(`Incoming ip was ${ip}`);
   req.hashedIp = hashIP(ip);
-  console.log(`Hashed ip is ${req.hashedIp}`);
   next();
 });
 
